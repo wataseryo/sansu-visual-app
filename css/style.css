@@ -648,6 +648,15 @@
         .prac-ans-unit { font-size: .85rem; color: #555; white-space: nowrap; }
         .prac-check-btn { background: linear-gradient(135deg, #FF9A56, #E64A19); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-family: inherit; font-weight: bold; cursor: pointer; }
         .prac-sol-box { background: #F8F9FA; border: 1.5px solid #E0E0E0; border-radius: 12px; padding: 16px; margin-bottom: 14px; white-space: pre-line; font-size: .85rem; line-height: 1.8; color: #333; }
+        .prac-steps-card { background: #fff; border-radius: 14px; padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.07); margin-bottom: 20px; display: none; }
+        .prac-steps-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .prac-steps-title { font-size: .95rem; font-weight: bold; color: #333; }
+        .prac-step { border: 1px solid #f0e8e0; border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+        .prac-step-hd { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: #fafafa; }
+        .prac-step-num { width: 22px; height: 22px; border-radius: 5px; background: var(--exam-primary); color: #fff; font-size: .72rem; font-weight: bold; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .prac-step-name { font-size: .88rem; font-weight: bold; color: #333; flex: 1; }
+        .prac-step-bd { padding: 14px; border-top: 1px solid #f0e8e0; }
+        .prac-step-text { font-size: .88rem; line-height: 1.85; color: #444; white-space: pre-line; }
         .prac-topic-link { background: #fff; border: 2px solid var(--exam-primary); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background .15s; }
         .prac-topic-link:hover { background: var(--exam-light); }
         .prac-topic-link-icon { font-size: 1.4rem; flex-shrink: 0; }

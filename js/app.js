@@ -320,11 +320,15 @@ function pracOpenProb(probId) {
             <button class="prac-check-btn" onclick="pracCheckAnswer()">答え合わせ</button>
         </div>
         <div id="prac-result-box" style="display:none;background:#E8F5E9;border-radius:10px;padding:12px;margin-bottom:14px;font-weight:bold;font-size:.9rem"></div>
-        <div class="prac-detail-actions">
-            <button class="prac-detail-btn btn-prac-sol" onclick="pracToggleSolution()">💡 解説を見る</button>
-            ${unit ? `<button class="prac-detail-btn btn-prac-topic" onclick="pracGoToTopic('${unitId}')">トピックで学ぶ</button>` : ''}
+        ${unit ? `<div class="prac-detail-actions">
+            <button class="prac-detail-btn btn-prac-topic" onclick="pracGoToTopic('${unitId}')">トピックで学ぶ</button>
+        </div>` : ''}
+        <div id="prac-steps-card" class="prac-steps-card">
+            <div class="prac-steps-hd">
+                <div class="prac-steps-title">📝 ステップ解説</div>
+            </div>
+            ${renderSolutionSteps(p.solution)}
         </div>
-        <div id="prac-sol-box" class="prac-sol-box" style="display:none">${p.solution || '解説を準備中です。'}</div>
         ${unit ? `<div class="prac-topic-link" onclick="pracGoToTopic('${unitId}')">
             <div class="prac-topic-link-body">
                 <div class="prac-topic-link-title">${unit.num} ${unit.title}</div>
@@ -377,14 +381,49 @@ function pracCheckAnswer() {
         recordAnswer(`g${appState.grade}_exam_${pracState.currentCatId}`, false);
         resetStreak();
     }
+    const stepsCard = document.getElementById('prac-steps-card');
+    if (stepsCard) stepsCard.style.display = 'block';
 }
 
 function pracToggleSolution() {
-    const box = document.getElementById('prac-sol-box');
-    const btn = document.querySelector('.btn-prac-sol');
-    const isHidden = box.style.display === 'none';
-    box.style.display = isHidden ? 'block' : 'none';
-    if (btn) btn.textContent = isHidden ? '💡 解説を閉じる' : '💡 解説を見る';
+    const card = document.getElementById('prac-steps-card');
+    if (card) card.style.display = card.style.display === 'none' ? 'block' : 'none';
+}
+
+function parseSolutionToSteps(solution) {
+    if (!solution) return [];
+    const parts = solution.split(/(【[^】]+】)/);
+    const steps = [];
+    let pending = '';
+    for (let i = 0; i < parts.length; i++) {
+        if (/^【[^】]+】$/.test(parts[i])) {
+            if (pending.trim()) steps.push({ title: null, body: pending.trim() });
+            pending = '';
+            const title = parts[i].replace(/[【】]/g, '').trim();
+            const body = (parts[i + 1] || '').trim();
+            if (title || body) steps.push({ title, body });
+            i++;
+        } else {
+            pending += parts[i];
+        }
+    }
+    if (pending.trim()) steps.push({ title: null, body: pending.trim() });
+    return steps;
+}
+
+function renderSolutionSteps(solution) {
+    const steps = parseSolutionToSteps(solution);
+    if (steps.length === 0) return `<div style="color:#888;font-size:.85rem">解説を準備中です。</div>`;
+    return steps.map((s, i) => `
+        <div class="prac-step">
+            ${s.title ? `<div class="prac-step-hd">
+                <div class="prac-step-num">${i + 1}</div>
+                <div class="prac-step-name">${escapeHtml(s.title)}</div>
+            </div>` : ''}
+            <div class="prac-step-bd">
+                <div class="prac-step-text">${escapeHtml(s.body).replace(/\n/g, '<br>')}</div>
+            </div>
+        </div>`).join('');
 }
 
 function pracGoToTopic(unitId) {
@@ -616,15 +655,12 @@ function saltSwitchTab(tab) {
 /* ── 各トピック画面から演習問題へ遷移 ── */
 // unitId: 'u6-ratio' | 'u6-speed' | 'u6-special'
 function openUnitPractice(unitId) {
-    const units = appState.grade === 5 ? EXAM_UNITS_G5 : EXAM_UNITS_G6;
-    const unit = units.find(u => u.id === unitId);
-    if (!unit) return;
-    showScreen('challenges', {
-        categories: unit.categories,
-        unitTitle: unit.title + ' — 演習問題',
-        tierMin: 1, tierMax: 3,
-        fromScreen: unitId,
-    });
+    const cat = PRACTICE_CATS.find(c =>
+        (appState.grade === 5 ? c.unitId5 : c.unitId6) === unitId
+    );
+    if (!cat) return;
+    showScreen('practice');
+    pracOpenCat(cat.id);
 }
 
 function openSaltPractice() {
