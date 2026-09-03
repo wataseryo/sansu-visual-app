@@ -711,6 +711,217 @@
     </div>
 </div>
 
+<!-- ════════ TOPIC: 平面図形の完成 ════════ -->
+<div id="u6-plane-screen" class="screen">
+    <div class="screen-header exam-header">
+        <button class="back-btn" onclick="showScreen('exam')">← 単元一覧</button>
+        <span class="screen-title">📐 平面図形の完成</span>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:16px">
+
+        <!-- 1. この単元で学ぶこと -->
+        <div class="topic-concept-card">
+            <div class="topic-concept-title">この単元で学ぶこと</div>
+            <div class="topic-concept-text">
+                平行四辺形・三角形・台形の面積公式を「なぜその式なのか」から理解します。<br>
+                図形を変形・分割するイメージを持つことで、複合図形や面積比など応用問題にも対応できるようになります。
+            </div>
+        </div>
+
+        <!-- 2. 入試でどう出るか -->
+        <div class="topic-concept-card">
+            <div class="topic-concept-title">入試でどう出るか</div>
+            <ul style="font-size:.88rem;color:#444;line-height:2;margin:0;padding-left:1.2em">
+                <li>複合図形（分割・補助線を引いて面積を求める）</li>
+                <li>面積から辺の長さを逆算（「高さを求めよ」）</li>
+                <li>等積変形（面積が等しい図形に変換する）</li>
+                <li>面積比（相似・分割比から求める）</li>
+            </ul>
+        </div>
+
+        <!-- 3. インタラクティブビジュアルセクション -->
+        <div class="topic-concept-card">
+            <div class="topic-concept-title">📐 なぜその公式？ — 図で見て理解する</div>
+            <div style="font-size:.83rem;color:#555;margin-bottom:10px">タブを選んで「変形を見る」ボタンを押してみよう</div>
+
+            <!-- タブ切替 -->
+            <div class="plane-tabs">
+                <button id="plane-tabbt-parallelogram" class="plane-tab-btn active" onclick="switchPlaneTab('parallelogram')">平行四辺形</button>
+                <button id="plane-tabbt-triangle"      class="plane-tab-btn"        onclick="switchPlaneTab('triangle')">三角形</button>
+                <button id="plane-tabbt-trapezoid"     class="plane-tab-btn"        onclick="switchPlaneTab('trapezoid')">台形</button>
+            </div>
+
+            <!-- ── タブ: 平行四辺形 ── -->
+            <div id="plane-tab-parallelogram" style="display:block">
+                <div class="plane-predict-card">
+                    <span class="plane-predict-icon">🤔</span>
+                    <div class="plane-predict-text">この平行四辺形、<b>切って動かすと長方形になる</b>と思う？<br>まず自分で考えてみよう。</div>
+                </div>
+                <div style="text-align:center;font-size:.95rem;color:#888;margin-bottom:8px">
+                    底辺 × 高さ <span style="color:#bbb">÷ ?</span> ＝ 面積
+                </div>
+                <svg id="pg-svg" viewBox="0 0 280 130" width="100%" style="max-width:320px;display:block;margin:0 auto">
+                    <!-- 背景グリッド -->
+                    <line x1="10" y1="20"  x2="10"  y2="110" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3"/>
+                    <line x1="50" y1="20"  x2="50"  y2="110" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3"/>
+                    <line x1="210" y1="20" x2="210" y2="110" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3"/>
+                    <line x1="10" y1="20"  x2="270" y2="20"  stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3"/>
+                    <line x1="10" y1="110" x2="270" y2="110" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3"/>
+                    <!-- 中央の長方形部分 -->
+                    <rect id="pg-rect-body" x="50" y="20" width="160" height="90" fill="#A5D6A7" stroke="#2E7D32" stroke-width="2"/>
+                    <!-- 左の三角形（切り取る部分） -->
+                    <polygon id="pg-tri-left" points="50,20 10,110 50,110" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"
+                             style="transition: transform 1.2s ease-in-out; transform-origin: 50px 65px;"/>
+                    <!-- 高さのラベル -->
+                    <line x1="222" y1="20" x2="222" y2="110" stroke="#E53935" stroke-width="1.5" stroke-dasharray="4"/>
+                    <text x="230" y="70" font-size="12" fill="#E53935">高さ</text>
+                    <!-- 底辺のラベル（アニメーション後に現れる） -->
+                    <text id="pg-base-label" x="130" y="125" font-size="12" fill="#1565C0" text-anchor="middle" opacity="0"
+                          style="transition: opacity 0.5s 1.2s;">底辺</text>
+                </svg>
+                <div style="text-align:center;margin-top:8px">
+                    <button class="plane-anim-btn play" onclick="playPlaneAnim('parallelogram')">▶ 変形を見る</button>
+                    <button class="plane-anim-btn reset" onclick="resetPlaneAnim('parallelogram')">↺ やり直す</button>
+                </div>
+                <div id="formula-parallelogram" class="formula-reveal">
+                    底辺 × 高さ ＝ 面積<br>
+                    <span style="font-size:.85rem;font-weight:normal;color:#2E7D32">左の三角形を右に移すと長方形になるから！</span>
+                </div>
+            </div>
+
+            <!-- ── タブ: 三角形 ── -->
+            <div id="plane-tab-triangle" style="display:none">
+                <div class="plane-predict-card">
+                    <span class="plane-predict-icon">🤔</span>
+                    <div class="plane-predict-text"><b>同じ三角形を2つ並べたら</b>、どんな形になる？<br>頭の中で動かしてみよう。</div>
+                </div>
+                <div style="text-align:center;font-size:.95rem;color:#888;margin-bottom:8px">
+                    底辺 × 高さ ÷ <span style="color:#bbb">?</span> ＝ 面積
+                </div>
+                <svg id="tri-svg" viewBox="0 0 280 130" width="100%" style="max-width:320px;display:block;margin:0 auto">
+                    <!-- 三角形1（固定）: 右下に直角を持つ三角形 -->
+                    <polygon id="tri-1" points="20,20 240,20 20,110" fill="#64B5F6" stroke="#1565C0" stroke-width="2"/>
+                    <!-- 三角形2（右から滑り込む）: tri-1と合わせると長方形になる -->
+                    <polygon id="tri-2" points="240,110 20,110 240,20" fill="#90CAF9" stroke="#1565C0" stroke-width="2"
+                             opacity="0" style="transition: opacity 0.3s, transform 1.2s ease-in-out;"/>
+                    <!-- 高さのラベル -->
+                    <line x1="252" y1="20" x2="252" y2="110" stroke="#E53935" stroke-width="1.5" stroke-dasharray="4"/>
+                    <text x="258" y="70" font-size="12" fill="#E53935">高さ</text>
+                    <!-- 底辺ラベル（アニメーション後に出現） -->
+                    <text id="tri-base-label" x="130" y="125" font-size="12" fill="#1565C0" text-anchor="middle" opacity="0"
+                          style="transition: opacity 0.5s 1.2s;">底辺</text>
+                </svg>
+                <div style="text-align:center;margin-top:8px">
+                    <button class="plane-anim-btn play" onclick="playPlaneAnim('triangle')">▶ 変形を見る</button>
+                    <button class="plane-anim-btn reset" onclick="resetPlaneAnim('triangle')">↺ やり直す</button>
+                </div>
+                <div id="formula-triangle" class="formula-reveal">
+                    底辺 × 高さ ÷ 2 ＝ 面積<br>
+                    <span style="font-size:.85rem;font-weight:normal;color:#2E7D32">同じ三角形2つで平行四辺形になるから÷2！</span>
+                </div>
+            </div>
+
+            <!-- ── タブ: 台形 ── -->
+            <div id="plane-tab-trapezoid" style="display:none">
+                <div class="plane-predict-card">
+                    <span class="plane-predict-icon">🤔</span>
+                    <div class="plane-predict-text"><b>台形を2つ合わせたら</b>、どんな形になる？<br>上底と下底はどうなる？</div>
+                </div>
+                <div style="text-align:center;font-size:.95rem;color:#888;margin-bottom:8px">
+                    (上底 + 下底) × 高さ ÷ <span style="color:#bbb">?</span> ＝ 面積
+                </div>
+                <svg id="trap-svg" viewBox="0 0 380 140" width="100%" style="max-width:380px;display:block;margin:0 auto">
+                    <!-- 台形1（固定）: 左辺が垂直な直角台形。上底=120, 下底=180 -->
+                    <polygon id="trap-1" points="40,20 160,20 220,110 40,110" fill="#FFB74D" stroke="#E65100" stroke-width="2"/>
+                    <!-- 台形2（右から滑り込む）: 台形1の鏡。上辺=180, 下辺=120, 右辺が垂直 -->
+                    <!-- 合体すると (40,20)-(340,20)-(340,110)-(40,110) = 長方形 -->
+                    <polygon id="trap-2" points="160,20 340,20 340,110 220,110" fill="#FFCC80" stroke="#E65100" stroke-width="2"
+                             opacity="0" style="transition: opacity 0.3s, transform 1.2s ease-in-out;"/>
+                    <!-- 上底・下底の静的ラベル -->
+                    <text x="100" y="14" font-size="11" fill="#1565C0" text-anchor="middle">上底</text>
+                    <text x="130" y="128" font-size="11" fill="#555" text-anchor="middle">下底</text>
+                    <!-- 高さのラベル -->
+                    <line x1="352" y1="20" x2="352" y2="110" stroke="#E53935" stroke-width="1.5" stroke-dasharray="4"/>
+                    <text x="358" y="70" font-size="11" fill="#E53935">高さ</text>
+                    <!-- 合わせた底辺ラベル（アニメーション後に出現） -->
+                    <text id="trap-combined-label" x="190" y="128" font-size="11" fill="#43A047" text-anchor="middle" opacity="0"
+                          style="transition: opacity 0.5s 1.2s;">上底 ＋ 下底 ＝ 底辺</text>
+                </svg>
+                <div style="text-align:center;margin-top:8px">
+                    <button class="plane-anim-btn play" onclick="playPlaneAnim('trapezoid')">▶ 変形を見る</button>
+                    <button class="plane-anim-btn reset" onclick="resetPlaneAnim('trapezoid')">↺ やり直す</button>
+                </div>
+                <div id="formula-trapezoid" class="formula-reveal">
+                    (上底 + 下底) × 高さ ÷ 2 ＝ 面積<br>
+                    <span style="font-size:.85rem;font-weight:normal;color:#2E7D32">台形2つで平行四辺形になる。底辺は上底＋下底！</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. よくあるミス -->
+        <div class="topic-concept-card">
+            <div class="topic-concept-title">よくあるミス</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+                <div style="display:flex;align-items:flex-start;gap:10px">
+                    <span style="background:#FFEBEE;color:#C62828;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:bold;flex-shrink:0;margin-top:2px">!</span>
+                    <div style="font-size:.85rem;color:#444;line-height:1.6">三角形の「高さ」は底辺に対して垂直な距離。斜めの辺の長さではない</div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:10px">
+                    <span style="background:#FFEBEE;color:#C62828;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:bold;flex-shrink:0;margin-top:2px">!</span>
+                    <div style="font-size:.85rem;color:#444;line-height:1.6">台形の公式で「÷2」を忘れる（平行四辺形の半分であることを忘れる）</div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:10px">
+                    <span style="background:#FFEBEE;color:#C62828;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:bold;flex-shrink:0;margin-top:2px">!</span>
+                    <div style="font-size:.85rem;color:#444;line-height:1.6">複合図形で補助線を引く前に、どう分割するか全体を見渡す習慣をつけよう</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 基本例題（複合図形） -->
+        <div class="topic-example-card">
+            <div class="topic-section-lbl">基本例題</div>
+            <div class="topic-example-q">
+                下の図は、底辺12cm・高さ8cmの平行四辺形の中に、頂点を結ぶ三角形が描かれています。<br>
+                平行四辺形の面積と、内側の三角形の面積をそれぞれ求めなさい。
+            </div>
+            <div style="background:#F3F4F6;border-radius:10px;padding:12px;margin:10px 0;text-align:center;font-size:.82rem;color:#555">
+                <svg viewBox="0 0 220 120" width="100%" style="max-width:240px;display:block;margin:0 auto">
+                    <polygon points="30,100 190,100 190,20 70,20" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+                    <polygon points="30,100 190,20 190,100" fill="#A5D6A7" stroke="#1B5E20" stroke-width="1.5" stroke-dasharray="5,3"/>
+                    <line x1="200" y1="20" x2="200" y2="100" stroke="#E53935" stroke-width="1.5" stroke-dasharray="4"/>
+                    <text x="206" y="65" font-size="11" fill="#E53935">8cm</text>
+                    <text x="105" y="115" font-size="11" fill="#1565C0" text-anchor="middle">12cm</text>
+                    <text x="155" y="78" font-size="10" fill="#1B5E20">△</text>
+                </svg>
+            </div>
+            <div class="topic-steps">
+                <div class="topic-step">
+                    <div class="topic-step-num">1</div>
+                    <div class="topic-step-text">平行四辺形の面積 ＝ 底辺 × 高さ<br>12 × 8 ＝ <b>96 cm²</b></div>
+                </div>
+                <div class="topic-step">
+                    <div class="topic-step-num">2</div>
+                    <div class="topic-step-text">三角形は平行四辺形と底辺・高さが同じ → 面積は半分<br>96 ÷ 2 ＝ <b>48 cm²</b></div>
+                </div>
+                <div class="topic-step">
+                    <div class="topic-step-num">3</div>
+                    <div class="topic-step-text">ポイント: 同じ底辺・高さなら 三角形 = 平行四辺形 ÷ 2 が成り立つ</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 体験問題セクション -->
+        <div id="trial-u6-plane"></div>
+
+        <!-- 演習問題への導線 -->
+        <div id="u6-plane-nav" class="topic-nav-card">
+            <div class="topic-nav-label">理解できたら演習問題に挑戦しよう</div>
+            <button class="topic-nav-btn prac" onclick="openUnitPractice('u6-plane')">演習問題を解く →</button>
+        </div>
+
+    </div>
+</div>
+
 <!-- ════════ TOPIC: 特殊算・文章題 ════════ -->
 <div id="u6-special-screen" class="screen">
     <div class="screen-header exam-header">

@@ -63,7 +63,7 @@ const EXAM_UNITS_G6 = [
     { id: 'u6-salt',    num: '③+', icon: '🧪', title: '食塩水',          sub: '濃度計算・混合・蒸発・希釈',                  difficulty: 4, categories: ['食塩水'],                              count: 8,  available: true, topicScreen: 'salt', parentUnit: 'u6-ratio' },
     { id: 'u6-special', num: '④', icon: '📝', title: '特殊算・文章題',   sub: '和差算・つるかめ算・過不足算・植木算・年齢算・平均算・分配算・集合算・消去算', difficulty: 4, categories: ['和差算','つるかめ算','過不足算','植木算','年齢算','平均算','消去算','分配算','集合算','水槽','ニュートン算'], count: 36, available: true, topicScreen: 'u6-special' },
     { id: 'u6-speed',   num: '⑤', icon: '🏃', title: '速さの完成',       sub: '旅人算・流水算・通過算・ダイヤグラム・速さと比', difficulty: 4, categories: ['速さ','流水算','通過算','時計算','ダイヤグラム','速さと比'], count: 30, available: true, topicScreen: 'u6-speed'  },
-    { id: 'u6-plane',   num: '⑥', icon: '📐', title: '平面図形の完成',   sub: '面積比・相似・円・移動・図形融合',            difficulty: 5, categories: ['平面図形'],                            count: 0,  available: false },
+    { id: 'u6-plane',   num: '⑥', icon: '📐', title: '平面図形の完成',   sub: '面積比・相似・円・移動・図形融合',            difficulty: 5, categories: ['平面図形'],                            count: 15, available: true,  topicScreen: 'u6-plane' },
     { id: 'u6-solid',   num: '⑦', icon: '📦', title: '立体図形の完成',   sub: '回転体・切断・体積比・投影図',                difficulty: 5, categories: ['立体'],                                count: 0,  available: false },
     { id: 'u6-cases',   num: '⑧', icon: '🎯', title: '場合の数・論理',   sub: '条件付き・道順・塗り分け・論理融合',         difficulty: 4, categories: ['場合の数'],                             count: 0,  available: false },
 ];

@@ -469,6 +469,7 @@ function showScreen(id, opts={}) {
     if (id === 'report')               { renderReport(); }
     if (id === 'u6-ratio')   { initTopicTrial('u6-ratio'); }
     if (id === 'u6-speed')   { initTopicTrial('u6-speed'); }
+    if (id === 'u6-plane')   { initTopicTrial('u6-plane'); switchPlaneTab('parallelogram'); }
     if (id === 'u6-special') { initTopicTrial('u6-special'); }
     if (id === 'challenges') {
         if (opts.unitTitle) document.getElementById('ch-screen-title').textContent = opts.unitTitle;
@@ -2072,6 +2073,99 @@ function escapeHtml(str) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
+}
+
+/* ════════════════════════════════════════
+   平面図形アニメーション制御
+════════════════════════════════════════ */
+function switchPlaneTab(tabName) {
+    ['parallelogram', 'triangle', 'trapezoid'].forEach(t => {
+        const el  = document.getElementById('plane-tab-' + t);
+        const btn = document.getElementById('plane-tabbt-' + t);
+        if (el)  el.style.display = (t === tabName) ? 'block' : 'none';
+        if (btn) btn.classList.toggle('active', t === tabName);
+    });
+    resetPlaneAnim(tabName);
+}
+
+function playPlaneAnim(shape) {
+    if (shape === 'parallelogram') {
+        const tri  = document.getElementById('pg-tri-left');
+        const lbl  = document.getElementById('pg-base-label');
+        const form = document.getElementById('formula-parallelogram');
+        if (!tri) return;
+        tri.style.transform = 'translateX(160px)';
+        if (lbl) lbl.style.opacity = '1';
+        setTimeout(() => { if (form) form.classList.add('visible'); }, 1500);
+    } else if (shape === 'triangle') {
+        const tri2 = document.getElementById('tri-2');
+        const lbl  = document.getElementById('tri-base-label');
+        const form = document.getElementById('formula-triangle');
+        if (!tri2) return;
+        // tri-2を右外から滑り込ませる（tri-1と合わさって長方形になる）
+        tri2.style.transition = 'none';
+        tri2.style.transform  = 'translateX(250px)';
+        tri2.style.opacity    = '0';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                tri2.style.transition = 'opacity 0.3s, transform 1.2s ease-in-out';
+                tri2.style.transform  = 'translateX(0)';
+                tri2.style.opacity    = '1';
+                if (lbl) { lbl.style.transition = 'opacity 0.5s 1.2s'; lbl.style.opacity = '1'; }
+                setTimeout(() => { if (form) form.classList.add('visible'); }, 1500);
+            });
+        });
+    } else if (shape === 'trapezoid') {
+        const trap2      = document.getElementById('trap-2');
+        const lblCombined = document.getElementById('trap-combined-label');
+        const form       = document.getElementById('formula-trapezoid');
+        if (!trap2) return;
+        // trap-2を右外から滑り込ませる（trap-1と合わさって長方形になる）
+        trap2.style.transition = 'none';
+        trap2.style.transform  = 'translateX(160px)';
+        trap2.style.opacity    = '0';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                trap2.style.transition = 'opacity 0.3s, transform 1.2s ease-in-out';
+                trap2.style.transform  = 'translateX(0)';
+                trap2.style.opacity    = '1';
+                if (lblCombined) { lblCombined.style.transition = 'opacity 0.5s 1.2s'; lblCombined.style.opacity = '1'; }
+                setTimeout(() => { if (form) form.classList.add('visible'); }, 1600);
+            });
+        });
+    }
+}
+
+function resetPlaneAnim(shape) {
+    if (shape === 'parallelogram') {
+        const tri  = document.getElementById('pg-tri-left');
+        const lbl  = document.getElementById('pg-base-label');
+        const form = document.getElementById('formula-parallelogram');
+        if (tri)  { tri.style.transition = 'none'; tri.style.transform = 'translateX(0)'; }
+        if (lbl)  { lbl.style.transition = 'none'; lbl.style.opacity   = '0'; }
+        if (form) form.classList.remove('visible');
+        // トランジションを再有効化
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                if (tri) tri.style.transition = 'transform 1.2s ease-in-out';
+                if (lbl) lbl.style.transition = 'opacity 0.5s 1.2s';
+            });
+        });
+    } else if (shape === 'triangle') {
+        const tri2 = document.getElementById('tri-2');
+        const lbl  = document.getElementById('tri-base-label');
+        const form = document.getElementById('formula-triangle');
+        if (tri2) { tri2.style.transition = 'none'; tri2.style.transform = 'translateX(250px)'; tri2.style.opacity = '0'; }
+        if (lbl)  { lbl.style.transition  = 'none'; lbl.style.opacity   = '0'; }
+        if (form) form.classList.remove('visible');
+    } else if (shape === 'trapezoid') {
+        const trap2       = document.getElementById('trap-2');
+        const lblCombined = document.getElementById('trap-combined-label');
+        const form        = document.getElementById('formula-trapezoid');
+        if (trap2)        { trap2.style.transition = 'none'; trap2.style.transform = 'translateX(160px)'; trap2.style.opacity = '0'; }
+        if (lblCombined)  { lblCombined.style.transition = 'none'; lblCombined.style.opacity = '0'; }
+        if (form)         form.classList.remove('visible');
+    }
 }
 
 /* ════════════════════════════════════════
